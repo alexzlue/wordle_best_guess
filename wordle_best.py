@@ -1,3 +1,4 @@
+from unittest import result
 from words import SECRET_WORDS
 from words import VALID_WORDS
 
@@ -40,8 +41,8 @@ def get_hint(secret, guess, seq=True):
     return tuple(hint)
 
 
-def print_best_guesses(guess_scores):
-    print('Top {} Best Scores:'.format(len(guess_scores)))
+def print_results(guess_scores, result_type='Best'):
+    print('Top {} {} Scores:'.format(len(guess_scores), result_type))
     for i, (word, score) in enumerate(guess_scores):
         print('{}. {}\t{}'.format(i+1, word, round(score, 2)))
 
@@ -57,7 +58,7 @@ def best_weighted_guess():
         hint = get_hint(secret, guess, seq=False)
         guess_scores[guess] += hint[0]*W_WGT + hint[1]*Y_WGT + hint[2]*G_WGT
     guess_scores_ctr = Counter(guess_scores).most_common(10)
-    print_best_guesses(guess_scores_ctr)
+    print_results(guess_scores_ctr)
 
 
 
@@ -137,8 +138,9 @@ def best_reduced_wordspace():
 
     global wordspaces
     guess_scores = {word: avg_ws for word, avg_ws in wordspaces.items()}
-    guess_scores_ctr = Counter(guess_scores).most_common(10)
-    print_best_guesses(guess_scores_ctr)
+    guess_scores = Counter(guess_scores).most_common()
+    print_results(guess_scores[-10:][::-1])
+    print_results(guess_scores[:10], 'Worst')
 
 
 if __name__ == "__main__":
