@@ -42,7 +42,7 @@ def get_hint(secret, guess, seq=True):
 
 
 def print_results(guess_scores, result_type='Best'):
-    print('Top {} {} Words:'.format(len(guess_scores), result_type))
+    print('Top {} {} 1st Guess Words:'.format(len(guess_scores), result_type))
     for i, (word, score) in enumerate(guess_scores):
         print('{}. {}\t{}'.format(i+1, word, round(score, 2)))
 
