@@ -96,9 +96,6 @@ def reduce_wordspace(guess, hint):
 manager = mp.Manager()
 wordspaces = manager.dict()
 
-def collect_result(result):
-    global wordspaces
-    wordspaces[result[0]] += result[1]
 
 def process_words(valid_words):
     global wordspaces
