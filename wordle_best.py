@@ -93,6 +93,13 @@ def reduce_wordspace(guess, hint):
             counts += 1
     return counts
 
+
+def write_to_csv(file_name, guess_scores):
+    with open(file_name, 'w') as fp:
+        fp.write('word,wordspace\n')
+        for guess, score in guess_scores:
+            fp.write('{},{}\n'.format(guess, score))
+
 manager = mp.Manager()
 wordspaces = manager.dict()
 
@@ -102,10 +109,12 @@ def process_words(valid_words):
     for guess in valid_words:
         agg_wordspace = 0
         for secret in SECRET_WORDS:
-            hint = get_hint(secret, guess, seq=False)
+            hint = get_hint(secret, guess)
             agg_wordspace += reduce_wordspace(guess, hint)
         avg_wordspace = agg_wordspace / len(SECRET_WORDS)
         wordspaces[guess] = avg_wordspace
+    if len(wordspaces) % 1000000 == 0:
+        print(len(wordspaces))
 
 
 def best_reduced_wordspace():
@@ -136,6 +145,7 @@ def best_reduced_wordspace():
     global wordspaces
     guess_scores = {word: avg_ws for word, avg_ws in wordspaces.items()}
     guess_scores = Counter(guess_scores).most_common()
+    write_to_csv('best_first_guess_words.csv', guess_scores[::-1])
     print_results(guess_scores[-10:][::-1])
     print_results(guess_scores[:10], 'Worst')
 
