@@ -113,8 +113,6 @@ def process_words(valid_words):
             agg_wordspace += reduce_wordspace(guess, hint)
         avg_wordspace = agg_wordspace / len(SECRET_WORDS)
         wordspaces[guess] = avg_wordspace
-    if len(wordspaces) % 1000000 == 0:
-        print(len(wordspaces))
 
 
 def best_reduced_wordspace():
